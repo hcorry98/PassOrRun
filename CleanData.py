@@ -43,6 +43,7 @@ class CleanData:
         df = pd.read_csv(file)
         snapEvents = ['ball_snap', 'autoevent_ballsnap']
         df = df.loc[df['event'].isin(snapEvents)]
+        df = df.drop_duplicates(subset=['gameId', 'playId', 'nflId'], keep='first')
 
         colsToDrop = ['frameId', 'time', 'jerseyNumber', 'event']
         if 'displayName' in df.columns:
