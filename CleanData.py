@@ -26,16 +26,18 @@ class CleanData:
 
     def __buildDict(self, row):
         self.ballDict[row['uniqueId']] = (row['x'], row['y'])
-    
+
+    def __centerX(self, row):
+        return row['x'] - self.ballDict[row['uniqueId']][0]
+
+    def __centerY(self, row):
+        return row['y'] - self.ballDict[row['uniqueId']][1]
+
     def _centerPlayers(self, df):
         df['uniqueId'] = df['gameId'].astype(str) + '_' + df['playId'].astype(str)
-        df = df.apply(self.__centerDf, axis=1)
+        df['x'] = df.apply(self.__centerX, axis=1)
+        df['y'] = df.apply(self.__centerY, axis=1)
         return df
-    
-    def __centerDf(self, row):
-        row['x'] = row['x'] - self.ballDict[row['uniqueId']][0]
-        row['y'] = row['y'] - self.ballDict[row['uniqueId']][1]
-        return row
 
     def _cleanTracking(self, file):
         df = pd.read_csv(file)
